@@ -5,7 +5,7 @@ Examples for go-json-rest
 See the Github repo here: https://github.com/ant0ine/go-json-rest
 
 
-Copyright (c) 2013 Antoine Imbert
+Copyright (c) 2013-2014 Antoine Imbert
 
 [MIT License](https://github.com/ant0ine/go-json-rest-examples/blob/master/LICENSE)
 
