@@ -15,7 +15,7 @@ import (
 func main() {
 
 	handler := rest.ResourceHandler{
-		PreRoutingMiddleware: func(handler rest.HandleFunc) rest.HandleFunc {
+		PreRoutingMiddleware: func(handler rest.HandlerFunc) rest.HandlerFunc {
 			return func(writer *rest.ResponseWriter, request *rest.Request) {
 
 				corsInfo := request.GetCorsInfo()
