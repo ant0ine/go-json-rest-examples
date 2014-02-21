@@ -49,6 +49,8 @@ func main() {
 					}
 					// check the request headers
 					allowedHeaders := map[string]bool{
+						"Accept":          true,
+						"Content-Type":    true,
 						"X-Custom-Header": true,
 					}
 					for _, requestedHeader := range corsInfo.AccessControlRequestHeaders {
