@@ -24,7 +24,7 @@ func main() {
 			userId := "admin"
 			password := "admin"
 
-			return func(writer *rest.ResponseWriter, request *rest.Request) {
+			return func(writer rest.ResponseWriter, request *rest.Request) {
 
 				authHeader := request.Header.Get("Authorization")
 				if authHeader == "" {
@@ -54,7 +54,7 @@ func main() {
 	http.ListenAndServe(":8080", &handler)
 }
 
-func Unauthorized(writer *rest.ResponseWriter, realm string) {
+func Unauthorized(writer rest.ResponseWriter, realm string) {
 	writer.Header().Set("WWW-Authenticate", "Basic realm="+realm)
 	rest.Error(writer, "Not Authorized", http.StatusUnauthorized)
 }
@@ -84,7 +84,7 @@ type Country struct {
 	Name string
 }
 
-func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
+func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(
 		[]Country{
 			Country{

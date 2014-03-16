@@ -18,7 +18,7 @@ type User struct {
 	Posts  string
 }
 
-func GetUser(w *rest.ResponseWriter, req *rest.Request) {
+func GetUser(w rest.ResponseWriter, req *rest.Request) {
 	params := map[string][]string {"userId": []string{ req.PathParam("id") }}
 	url := req.UriForWithParams("/posts/exports", params)
 	user := User{

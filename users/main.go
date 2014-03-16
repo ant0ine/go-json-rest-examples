@@ -48,7 +48,7 @@ type Users struct {
 	Store map[string]*User
 }
 
-func (self *Users) GetAllUsers(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) GetAllUsers(w rest.ResponseWriter, r *rest.Request) {
 	users := make([]*User, len(self.Store))
 	i := 0
 	for _, user := range self.Store {
@@ -58,7 +58,7 @@ func (self *Users) GetAllUsers(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&users)
 }
 
-func (self *Users) GetUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) GetUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	user := self.Store[id]
 	if user == nil {
@@ -68,7 +68,7 @@ func (self *Users) GetUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) PostUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) PostUser(w rest.ResponseWriter, r *rest.Request) {
 	user := User{}
 	err := r.DecodeJsonPayload(&user)
 	if err != nil {
@@ -81,7 +81,7 @@ func (self *Users) PostUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) PutUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	if self.Store[id] == nil {
 		rest.NotFound(w, r)
@@ -98,7 +98,7 @@ func (self *Users) PutUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) DeleteUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) DeleteUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	delete(self.Store, id)
 }

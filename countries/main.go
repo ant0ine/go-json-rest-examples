@@ -41,7 +41,7 @@ type Country struct {
 
 var store = map[string]*Country{}
 
-func GetCountry(w *rest.ResponseWriter, r *rest.Request) {
+func GetCountry(w rest.ResponseWriter, r *rest.Request) {
 	code := r.PathParam("code")
 	country := store[code]
 	if country == nil {
@@ -51,7 +51,7 @@ func GetCountry(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&country)
 }
 
-func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
+func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
 	countries := make([]*Country, len(store))
 	i := 0
 	for _, country := range store {
@@ -61,7 +61,7 @@ func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&countries)
 }
 
-func PostCountry(w *rest.ResponseWriter, r *rest.Request) {
+func PostCountry(w rest.ResponseWriter, r *rest.Request) {
 	country := Country{}
 	err := r.DecodeJsonPayload(&country)
 	if err != nil {
@@ -80,7 +80,7 @@ func PostCountry(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&country)
 }
 
-func DeleteCountry(w *rest.ResponseWriter, r *rest.Request) {
+func DeleteCountry(w rest.ResponseWriter, r *rest.Request) {
 	code := r.PathParam("code")
 	delete(store, code)
 }

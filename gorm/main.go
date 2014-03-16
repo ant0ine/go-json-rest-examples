@@ -64,13 +64,13 @@ func (api *Api) InitSchema() {
 	api.DB.AutoMigrate(Reminder{})
 }
 
-func (api *Api) GetAllReminders(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) GetAllReminders(w rest.ResponseWriter, r *rest.Request) {
 	reminders := []Reminder{}
 	api.DB.Find(&reminders)
 	w.WriteJson(&reminders)
 }
 
-func (api *Api) GetReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) GetReminder(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	reminder := Reminder{}
 	if api.DB.First(&reminder, id).Error != nil {
@@ -80,7 +80,7 @@ func (api *Api) GetReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) PostReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) PostReminder(w rest.ResponseWriter, r *rest.Request) {
 	reminder := Reminder{}
 	if err := r.DecodeJsonPayload(&reminder); err != nil {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
@@ -93,7 +93,7 @@ func (api *Api) PostReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) PutReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) PutReminder(w rest.ResponseWriter, r *rest.Request) {
 
 	id := r.PathParam("id")
 	reminder := Reminder{}
@@ -117,7 +117,7 @@ func (api *Api) PutReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) DeleteReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) DeleteReminder(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	reminder := Reminder{}
 	if api.DB.First(&reminder, id).Error != nil {

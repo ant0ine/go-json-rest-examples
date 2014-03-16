@@ -16,7 +16,7 @@ func main() {
 
 	handler := rest.ResourceHandler{
 		PreRoutingMiddleware: func(handler rest.HandlerFunc) rest.HandlerFunc {
-			return func(writer *rest.ResponseWriter, request *rest.Request) {
+			return func(writer rest.ResponseWriter, request *rest.Request) {
 
 				corsInfo := request.GetCorsInfo()
 
@@ -93,7 +93,7 @@ type Country struct {
 	Name string
 }
 
-func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
+func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(
 		[]Country{
 			Country{
