@@ -1,4 +1,6 @@
-/* Demonstrate a possible global Basic Auth implementation
+/* Demonstrate how to implement a custom AuthBasic middleware, used to protect all endpoints.
+
+This is a very simple version supporting only one user.
 
 The Curl Demo:
 
@@ -15,51 +17,43 @@ import (
 	"strings"
 )
 
-func main() {
-
-	handler := rest.ResourceHandler{
-		PreRoutingMiddleware: func(handler rest.HandlerFunc) rest.HandlerFunc {
-
-			realm := "Administration"
-			userId := "admin"
-			password := "admin"
-
-			return func(writer rest.ResponseWriter, request *rest.Request) {
-
-				authHeader := request.Header.Get("Authorization")
-				if authHeader == "" {
-					Unauthorized(writer, realm)
-					return
-				}
-
-				providedUserId, providedPassword, err := DecodeBasicAuthHeader(authHeader)
-
-				if err != nil {
-					rest.Error(writer, "Invalid authentication", http.StatusBadRequest)
-					return
-				}
-
-				if !(providedUserId == userId && providedPassword == password) {
-					Unauthorized(writer, realm)
-					return
-				}
-
-				handler(writer, request)
-			}
-		},
-	}
-	handler.SetRoutes(
-		rest.Route{"GET", "/countries", GetAllCountries},
-	)
-	http.ListenAndServe(":8080", &handler)
+type MyAuthBasicMiddleware struct {
+	Realm    string
+	UserId   string
+	Password string
 }
 
-func Unauthorized(writer rest.ResponseWriter, realm string) {
-	writer.Header().Set("WWW-Authenticate", "Basic realm="+realm)
+func (mw *MyAuthBasicMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.HandlerFunc {
+	return func(writer rest.ResponseWriter, request *rest.Request) {
+
+		authHeader := request.Header.Get("Authorization")
+		if authHeader == "" {
+			mw.unauthorized(writer)
+			return
+		}
+
+		providedUserId, providedPassword, err := mw.decodeBasicAuthHeader(authHeader)
+
+		if err != nil {
+			rest.Error(writer, "Invalid authentication", http.StatusBadRequest)
+			return
+		}
+
+		if !(providedUserId == mw.UserId && providedPassword == mw.Password) {
+			mw.unauthorized(writer)
+			return
+		}
+
+		handler(writer, request)
+	}
+}
+
+func (mw *MyAuthBasicMiddleware) unauthorized(writer rest.ResponseWriter) {
+	writer.Header().Set("WWW-Authenticate", "Basic realm="+mw.Realm)
 	rest.Error(writer, "Not Authorized", http.StatusUnauthorized)
 }
 
-func DecodeBasicAuthHeader(header string) (user string, password string, err error) {
+func (mw *MyAuthBasicMiddleware) decodeBasicAuthHeader(header string) (user string, password string, err error) {
 
 	parts := strings.SplitN(header, " ", 2)
 	if !(len(parts) == 2 && parts[0] == "Basic") {
@@ -77,6 +71,23 @@ func DecodeBasicAuthHeader(header string) (user string, password string, err err
 	}
 
 	return creds[0], creds[1], nil
+}
+
+func main() {
+
+	handler := rest.ResourceHandler{
+		PreRoutingMiddlewares: []rest.Middleware{
+			&MyAuthBasicMiddleware{
+				Realm:    "Administration",
+				UserId:   "admin",
+				Password: "admin",
+			},
+		},
+	}
+	handler.SetRoutes(
+		rest.Route{"GET", "/countries", GetAllCountries},
+	)
+	http.ListenAndServe(":8080", &handler)
 }
 
 type Country struct {
