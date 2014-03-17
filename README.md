@@ -9,4 +9,4 @@ Copyright (c) 2013-2014 Antoine Imbert
 
 [MIT License](https://github.com/ant0ine/go-json-rest-examples/blob/master/LICENSE)
 
-[![Analytics](https://ga-beacon.appspot.com/UA-309210-4/go-json-rest-examples/readme)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-309210-4/go-json-rest-examples/v2-alpha/readme)](https://github.com/igrigorik/ga-beacon)
