@@ -12,7 +12,7 @@ package main
 import (
 	"encoding/base64"
 	"errors"
-	"github.com/ant0ine/go-json-rest"
+	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
 	"strings"
 )
