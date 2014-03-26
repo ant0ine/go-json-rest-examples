@@ -2,7 +2,7 @@
 
 This is a very simple version supporting only one user.
 
-The Curl Demo:
+The curl demo:
 
         curl -i http://127.0.0.1:8080/countries
 

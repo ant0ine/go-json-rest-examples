@@ -1,12 +1,13 @@
-// Demonstrate how to use SPDY with github.com/shykes/spdy-go
-//
-// For a command line client, install spdycat from:
-// https://github.com/tatsuhiro-t/spdylay
-//
-// Then:
-//
-// spdycat -v --no-tls -2 http://localhost:8080/users/0
-//
+/* Demonstrate how to use SPDY with github.com/shykes/spdy-go
+
+For a command line client, install spdycat from:
+https://github.com/tatsuhiro-t/spdylay
+
+The spdycat demo:
+
+        spdycat -v --no-tls -2 http://localhost:8080/users/0
+
+*/
 package main
 
 import (

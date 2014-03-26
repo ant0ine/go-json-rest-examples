@@ -2,9 +2,11 @@
 
 The stream format is a Line Delimited JSON.
 
-The Curl Demo:
+The curl demo:
 
         curl -i http://127.0.0.1:8080/stream
+
+
 
         HTTP/1.1 200 OK
         Content-Type: application/json
