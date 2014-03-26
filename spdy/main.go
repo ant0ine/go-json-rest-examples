@@ -1,4 +1,4 @@
-/* Demonstrate how to use SPDY with github.com/shykes/spdy-go
+/* Demonstrate how to use SPDY with https://github.com/shykes/spdy-go
 
 For a command line client, install spdycat from:
 https://github.com/tatsuhiro-t/spdylay

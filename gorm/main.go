@@ -1,6 +1,6 @@
 /* Demonstrate basic CRUD operation using a store based on MySQL and GORM
 
-GORM (github.com/jinzhu/gorm) is simple ORM library.
+GORM (https://github.com/jinzhu/gorm) is simple ORM library.
 In this example the same struct is used both as the GORM model and as the JSON model.
 
 The curl demo:

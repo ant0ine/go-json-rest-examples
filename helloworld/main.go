@@ -19,7 +19,9 @@ type Message struct {
 func main() {
 	handler := rest.ResourceHandler{}
 	handler.SetRoutes(
-		rest.Route{"GET", "/message",
+		rest.Route{
+                        "GET",
+                        "/message",
                         func(w rest.ResponseWriter, req *rest.Request) {
                                 w.WriteJson(&Message{
                                         Body: "Hello World!",
