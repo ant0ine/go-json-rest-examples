@@ -1,6 +1,9 @@
 /* Demonstrate basic CRUD operation using a store based on MySQL and GORM
 
-The Curl Demo:
+GORM (github.com/jinzhu/gorm) is simple ORM library.
+In this example the same struct is used both as the GORM model and as the JSON model.
+
+The curl demo:
 
         curl -i -d '{"Message":"this is a test"}' http://127.0.0.1:8080/reminders
         curl -i http://127.0.0.1:8080/reminders/1
