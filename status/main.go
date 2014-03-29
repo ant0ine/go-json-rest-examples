@@ -42,7 +42,7 @@ func main() {
                 EnableStatusService: true,
         }
 	handler.SetRoutes(
-		rest.Route{"GET", "/.status",
+		&rest.Route{"GET", "/.status",
 			func(w rest.ResponseWriter, r *rest.Request) {
 				w.WriteJson(handler.GetStatus())
 			},

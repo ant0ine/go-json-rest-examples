@@ -26,10 +26,10 @@ func main() {
                 EnableRelaxedContentType: true,
         }
 	handler.SetRoutes(
-		rest.Route{"GET", "/countries", GetAllCountries},
-		rest.Route{"POST", "/countries", PostCountry},
-		rest.Route{"GET", "/countries/:code", GetCountry},
-		rest.Route{"DELETE", "/countries/:code", DeleteCountry},
+		&rest.Route{"GET", "/countries", GetAllCountries},
+		&rest.Route{"POST", "/countries", PostCountry},
+		&rest.Route{"GET", "/countries/:code", GetCountry},
+		&rest.Route{"DELETE", "/countries/:code", DeleteCountry},
 	)
 	http.ListenAndServe(":8080", &handler)
 }

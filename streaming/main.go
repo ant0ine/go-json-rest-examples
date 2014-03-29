@@ -32,7 +32,7 @@ func main() {
 		DisableJsonIndent:        true,
 	}
 	handler.SetRoutes(
-		rest.Route{"GET", "/stream", StreamThings},
+		&rest.Route{"GET", "/stream", StreamThings},
 	)
 	http.ListenAndServe(":8080", &handler)
 }

@@ -31,8 +31,8 @@ func main() {
 		},
 	}
 	handler.SetRoutes(
-		rest.Route{"GET", "/countries", GetAllCountries},
-		rest.Route{"GET", "/.status",
+		&rest.Route{"GET", "/countries", GetAllCountries},
+		&rest.Route{"GET", "/.status",
 			auth.MiddlewareFunc(
 				func(w rest.ResponseWriter, r *rest.Request) {
 					w.WriteJson(handler.GetStatus())

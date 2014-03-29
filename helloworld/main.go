@@ -19,7 +19,7 @@ type Message struct {
 func main() {
 	handler := rest.ResourceHandler{}
 	handler.SetRoutes(
-		rest.Route{
+		&rest.Route{
                         "GET",
                         "/message",
                         func(w rest.ResponseWriter, req *rest.Request) {

@@ -89,7 +89,7 @@ func main() {
 		},
 	}
 	handler.SetRoutes(
-		rest.Route{"GET", "/countries", GetAllCountries},
+		&rest.Route{"GET", "/countries", GetAllCountries},
 	)
 	http.ListenAndServe(":8080", &handler)
 }
