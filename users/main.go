@@ -3,7 +3,7 @@
 rest.RouteObjectMethod helps create a Route that points to
 an object method instead of just a function.
 
-The Curl Demo:
+The curl demo:
 
         curl -i -d '{"Name":"Antoine"}' http://127.0.0.1:8080/users
         curl -i http://127.0.0.1:8080/users/0
@@ -16,7 +16,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ant0ine/go-json-rest"
+	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
 )
 
@@ -48,7 +48,7 @@ type Users struct {
 	Store map[string]*User
 }
 
-func (self *Users) GetAllUsers(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) GetAllUsers(w rest.ResponseWriter, r *rest.Request) {
 	users := make([]*User, len(self.Store))
 	i := 0
 	for _, user := range self.Store {
@@ -58,7 +58,7 @@ func (self *Users) GetAllUsers(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&users)
 }
 
-func (self *Users) GetUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) GetUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	user := self.Store[id]
 	if user == nil {
@@ -68,7 +68,7 @@ func (self *Users) GetUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) PostUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) PostUser(w rest.ResponseWriter, r *rest.Request) {
 	user := User{}
 	err := r.DecodeJsonPayload(&user)
 	if err != nil {
@@ -81,7 +81,7 @@ func (self *Users) PostUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) PutUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	if self.Store[id] == nil {
 		rest.NotFound(w, r)
@@ -98,7 +98,7 @@ func (self *Users) PutUser(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&user)
 }
 
-func (self *Users) DeleteUser(w *rest.ResponseWriter, r *rest.Request) {
+func (self *Users) DeleteUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	delete(self.Store, id)
 }

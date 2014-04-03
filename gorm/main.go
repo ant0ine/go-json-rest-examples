@@ -1,6 +1,9 @@
 /* Demonstrate basic CRUD operation using a store based on MySQL and GORM
 
-The Curl Demo:
+GORM (https://github.com/jinzhu/gorm) is simple ORM library.
+In this example the same struct is used both as the GORM model and as the JSON model.
+
+The curl demo:
 
         curl -i -d '{"Message":"this is a test"}' http://127.0.0.1:8080/reminders
         curl -i http://127.0.0.1:8080/reminders/1
@@ -12,7 +15,7 @@ The Curl Demo:
 package main
 
 import (
-	"github.com/ant0ine/go-json-rest"
+	"github.com/ant0ine/go-json-rest/rest"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"log"
@@ -30,11 +33,11 @@ func main() {
 		EnableRelaxedContentType: true,
 	}
 	handler.SetRoutes(
-		rest.RouteObjectMethod("GET", "/reminders", &api, "GetAllReminders"),
-		rest.RouteObjectMethod("POST", "/reminders", &api, "PostReminder"),
-		rest.RouteObjectMethod("GET", "/reminders/:id", &api, "GetReminder"),
-		rest.RouteObjectMethod("PUT", "/reminders/:id", &api, "PutReminder"),
-		rest.RouteObjectMethod("DELETE", "/reminders/:id", &api, "DeleteReminder"),
+		&rest.RouteObjectMethod("GET", "/reminders", &api, "GetAllReminders"),
+		&rest.RouteObjectMethod("POST", "/reminders", &api, "PostReminder"),
+		&rest.RouteObjectMethod("GET", "/reminders/:id", &api, "GetReminder"),
+		&rest.RouteObjectMethod("PUT", "/reminders/:id", &api, "PutReminder"),
+		&rest.RouteObjectMethod("DELETE", "/reminders/:id", &api, "DeleteReminder"),
 	)
 	http.ListenAndServe(":8080", &handler)
 }
@@ -64,13 +67,13 @@ func (api *Api) InitSchema() {
 	api.DB.AutoMigrate(Reminder{})
 }
 
-func (api *Api) GetAllReminders(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) GetAllReminders(w rest.ResponseWriter, r *rest.Request) {
 	reminders := []Reminder{}
 	api.DB.Find(&reminders)
 	w.WriteJson(&reminders)
 }
 
-func (api *Api) GetReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) GetReminder(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	reminder := Reminder{}
 	if api.DB.First(&reminder, id).Error != nil {
@@ -80,7 +83,7 @@ func (api *Api) GetReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) PostReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) PostReminder(w rest.ResponseWriter, r *rest.Request) {
 	reminder := Reminder{}
 	if err := r.DecodeJsonPayload(&reminder); err != nil {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
@@ -93,7 +96,7 @@ func (api *Api) PostReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) PutReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) PutReminder(w rest.ResponseWriter, r *rest.Request) {
 
 	id := r.PathParam("id")
 	reminder := Reminder{}
@@ -117,7 +120,7 @@ func (api *Api) PutReminder(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&reminder)
 }
 
-func (api *Api) DeleteReminder(w *rest.ResponseWriter, r *rest.Request) {
+func (api *Api) DeleteReminder(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	reminder := Reminder{}
 	if api.DB.First(&reminder, id).Error != nil {

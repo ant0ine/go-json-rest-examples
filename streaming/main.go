@@ -2,7 +2,7 @@
 
 The stream format is a Line Delimited JSON.
 
-The Curl Demo:
+The curl demo:
 
         curl -i http://127.0.0.1:8080/stream
 
@@ -20,7 +20,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ant0ine/go-json-rest"
+	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
 	"time"
 )
@@ -32,7 +32,7 @@ func main() {
 		DisableJsonIndent:        true,
 	}
 	handler.SetRoutes(
-		rest.Route{"GET", "/stream", StreamThings},
+		&rest.Route{"GET", "/stream", StreamThings},
 	)
 	http.ListenAndServe(":8080", &handler)
 }
@@ -41,7 +41,7 @@ type Thing struct {
 	Name string
 }
 
-func StreamThings(w *rest.ResponseWriter, r *rest.Request) {
+func StreamThings(w rest.ResponseWriter, r *rest.Request) {
 	cpt := 0
 	for {
 		cpt++
@@ -50,9 +50,9 @@ func StreamThings(w *rest.ResponseWriter, r *rest.Request) {
 				Name: fmt.Sprintf("thing #%d", cpt),
 			},
 		)
-		w.Write([]byte("\n"))
+		w.(http.ResponseWriter).Write([]byte("\n"))
 		// Flush the buffer to client
-		w.Flush()
+		w.(http.Flusher).Flush()
 		// wait 3 seconds
 		time.Sleep(time.Duration(3) * time.Second)
 	}

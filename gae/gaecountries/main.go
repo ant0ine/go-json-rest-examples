@@ -1,6 +1,6 @@
 /* Demonstrate a simple Google App Engine app
 
-The Curl Demo:
+The curl demo:
 
         curl -i -d '{"Code":"FR","Name":"France"}' http://127.0.0.1:8080/countries
         curl -i -d '{"Code":"US","Name":"United States"}' http://127.0.0.1:8080/countries
@@ -16,7 +16,7 @@ The Curl Demo:
 package gaecountries
 
 import (
-	"github.com/ant0ine/go-json-rest"
+	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
 )
 
@@ -24,10 +24,10 @@ func init() {
 
 	handler := rest.ResourceHandler{}
 	handler.SetRoutes(
-		rest.Route{"GET", "/countries", GetAllCountries},
-		rest.Route{"POST", "/countries", PostCountry},
-		rest.Route{"GET", "/countries/:code", GetCountry},
-		rest.Route{"DELETE", "/countries/:code", DeleteCountry},
+		&rest.Route{"GET", "/countries", GetAllCountries},
+		&rest.Route{"POST", "/countries", PostCountry},
+		&rest.Route{"GET", "/countries/:code", GetCountry},
+		&rest.Route{"DELETE", "/countries/:code", DeleteCountry},
 	)
 	http.Handle("/", &handler)
 }
@@ -39,7 +39,7 @@ type Country struct {
 
 var store = map[string]*Country{}
 
-func GetCountry(w *rest.ResponseWriter, r *rest.Request) {
+func GetCountry(w rest.ResponseWriter, r *rest.Request) {
 	code := r.PathParam("code")
 	country := store[code]
 	if country == nil {
@@ -49,7 +49,7 @@ func GetCountry(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&country)
 }
 
-func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
+func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
 	countries := make([]*Country, len(store))
 	i := 0
 	for _, country := range store {
@@ -59,7 +59,7 @@ func GetAllCountries(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&countries)
 }
 
-func PostCountry(w *rest.ResponseWriter, r *rest.Request) {
+func PostCountry(w rest.ResponseWriter, r *rest.Request) {
 	country := Country{}
 	err := r.DecodeJsonPayload(&country)
 	if err != nil {
@@ -78,7 +78,7 @@ func PostCountry(w *rest.ResponseWriter, r *rest.Request) {
 	w.WriteJson(&country)
 }
 
-func DeleteCountry(w *rest.ResponseWriter, r *rest.Request) {
+func DeleteCountry(w rest.ResponseWriter, r *rest.Request) {
 	code := r.PathParam("code")
 	delete(store, code)
 }
