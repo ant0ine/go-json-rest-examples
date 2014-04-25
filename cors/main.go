@@ -21,8 +21,9 @@ func main() {
 				OriginValidator: func(origin string, request *rest.Request) bool {
 					return origin == "http://my.other.host"
 				},
-				AllowedMethods:                []string{"GET", "POST", "PUT"},
-				AllowedHeaders:                []string{"Accept", "Content-Type", "X-Custom-Header"},
+				AllowedMethods: []string{"GET", "POST", "PUT"},
+				AllowedHeaders: []string{
+					"Accept", "Content-Type", "X-Custom-Header", "Origin"},
 				AccessControlAllowCredentials: true,
 				AccessControlMaxAge:           3600,
 			},
