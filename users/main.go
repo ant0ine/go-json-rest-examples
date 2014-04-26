@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
+        "sync"
 )
 
 func main() {
@@ -45,22 +46,27 @@ type User struct {
 }
 
 type Users struct {
+	sync.RWMutex
 	Store map[string]*User
 }
 
 func (self *Users) GetAllUsers(w rest.ResponseWriter, r *rest.Request) {
+	self.RLock()
 	users := make([]*User, len(self.Store))
 	i := 0
 	for _, user := range self.Store {
 		users[i] = user
 		i++
 	}
+	self.RUnlock()
 	w.WriteJson(&users)
 }
 
 func (self *Users) GetUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
+	self.RLock()
 	user := self.Store[id]
+	self.RUnlock()
 	if user == nil {
 		rest.NotFound(w, r)
 		return
@@ -75,14 +81,17 @@ func (self *Users) PostUser(w rest.ResponseWriter, r *rest.Request) {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	self.Lock()
 	id := fmt.Sprintf("%d", len(self.Store)) // stupid
 	user.Id = id
 	self.Store[id] = &user
+	self.Unlock()
 	w.WriteJson(&user)
 }
 
 func (self *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
+	self.Lock()
 	if self.Store[id] == nil {
 		rest.NotFound(w, r)
 		return
@@ -95,10 +104,13 @@ func (self *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	}
 	user.Id = id
 	self.Store[id] = &user
+	self.Unlock()
 	w.WriteJson(&user)
 }
 
 func (self *Users) DeleteUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
+	self.Lock()
 	delete(self.Store, id)
+	self.Unlock()
 }
