@@ -100,4 +100,5 @@ func DeleteCountry(w rest.ResponseWriter, r *rest.Request) {
 	lock.Lock()
 	delete(store, code)
 	lock.Unlock()
+	w.WriteHeader(http.StatusOK)
 }

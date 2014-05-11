@@ -103,4 +103,5 @@ func (u *Users) DeleteUser(w rest.ResponseWriter, r *rest.Request) {
 	u.Lock()
 	delete(u.Store, id)
 	u.Unlock()
+	w.WriteHeader(http.StatusOK)
 }
