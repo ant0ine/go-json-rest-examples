@@ -38,10 +38,10 @@ type Users struct {
 
 func (u *Users) GetAllUsers(w rest.ResponseWriter, r *rest.Request) {
 	u.RLock()
-	users := make([]*User, len(u.Store))
+	users := make([]User, len(u.Store))
 	i := 0
 	for _, user := range u.Store {
-		users[i] = user
+		users[i] = *user
 		i++
 	}
 	u.RUnlock()
@@ -51,13 +51,17 @@ func (u *Users) GetAllUsers(w rest.ResponseWriter, r *rest.Request) {
 func (u *Users) GetUser(w rest.ResponseWriter, r *rest.Request) {
 	id := r.PathParam("id")
 	u.RLock()
-	user := u.Store[id]
+	var user *User
+	if u.Store[id] != nil {
+		user = &User{}
+		*user = *u.Store[id]
+	}
 	u.RUnlock()
 	if user == nil {
 		rest.NotFound(w, r)
 		return
 	}
-	w.WriteJson(&user)
+	w.WriteJson(user)
 }
 
 func (u *Users) PostUser(w rest.ResponseWriter, r *rest.Request) {
