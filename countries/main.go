@@ -46,22 +46,28 @@ var lock = sync.RWMutex{}
 
 func GetCountry(w rest.ResponseWriter, r *rest.Request) {
 	code := r.PathParam("code")
+
 	lock.RLock()
-	country := store[code]
+	var country *Country
+	if store[code] != nil {
+		country = &Country{}
+		*country = *store[code]
+	}
 	lock.RUnlock()
+
 	if country == nil {
 		rest.NotFound(w, r)
 		return
 	}
-	w.WriteJson(&country)
+	w.WriteJson(country)
 }
 
 func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
 	lock.RLock()
-	countries := make([]*Country, len(store))
+	countries := make([]Country, len(store))
 	i := 0
 	for _, country := range store {
-		countries[i] = country
+		countries[i] = *country
 		i++
 	}
 	lock.RUnlock()
