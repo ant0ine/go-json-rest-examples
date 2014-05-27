@@ -17,6 +17,6 @@ Setup:
  * path/to/google_appengine/dev_appserver.py .
 
 The curl demo:
-
-        curl -i http://127.0.0.1:8080/message
-
+```
+curl -i http://127.0.0.1:8080/message
+```

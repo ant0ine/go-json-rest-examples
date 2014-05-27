@@ -16,7 +16,6 @@ Content-Type and using the type assertion to access the Write method
 is enough. As shown in this example.
 
 The curl demo:
-
-        curl -i http://127.0.0.1:8080/message.txt
-
-
+```
+curl -i http://127.0.0.1:8080/message.txt
+```

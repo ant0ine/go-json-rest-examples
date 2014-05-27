@@ -6,6 +6,6 @@ For a command line client, install spdycat from:
 https://github.com/tatsuhiro-t/spdylay
 
 The spdycat demo:
-
-        spdycat -v --no-tls -2 http://localhost:8080/users/0
-
+```
+spdycat -v --no-tls -2 http://localhost:8080/users/0
+```
