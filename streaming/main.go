@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
+	"log"
 	"net/http"
 	"time"
 )
@@ -13,10 +14,13 @@ func main() {
 		EnableRelaxedContentType: true,
 		DisableJsonIndent:        true,
 	}
-	handler.SetRoutes(
+	err := handler.SetRoutes(
 		&rest.Route{"GET", "/stream", StreamThings},
 	)
-	http.ListenAndServe(":8080", &handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatal(http.ListenAndServe(":8080", &handler))
 }
 
 type Thing struct {

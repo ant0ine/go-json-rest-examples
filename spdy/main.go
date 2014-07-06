@@ -21,8 +21,11 @@ func GetUser(w rest.ResponseWriter, req *rest.Request) {
 
 func main() {
 	handler := rest.ResourceHandler{}
-	handler.SetRoutes(
+	err := handler.SetRoutes(
 		&rest.Route{"GET", "/users/:id", GetUser},
 	)
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Fatal(spdy.ListenAndServeTCP(":8080", &handler))
 }

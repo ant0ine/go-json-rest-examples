@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
+	"log"
 	"net/http"
 	"sync"
 )
@@ -16,14 +17,17 @@ func main() {
 	handler := rest.ResourceHandler{
 		EnableRelaxedContentType: true,
 	}
-	handler.SetRoutes(
+	err := handler.SetRoutes(
 		rest.RouteObjectMethod("GET", "/users", &users, "GetAllUsers"),
 		rest.RouteObjectMethod("POST", "/users", &users, "PostUser"),
 		rest.RouteObjectMethod("GET", "/users/:id", &users, "GetUser"),
 		rest.RouteObjectMethod("PUT", "/users/:id", &users, "PutUser"),
 		rest.RouteObjectMethod("DELETE", "/users/:id", &users, "DeleteUser"),
 	)
-	http.ListenAndServe(":8080", &handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatal(http.ListenAndServe(":8080", &handler))
 }
 
 type User struct {

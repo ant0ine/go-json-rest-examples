@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ant0ine/go-json-rest/rest"
+	"log"
 	"net/http"
 )
 
@@ -18,7 +19,7 @@ func main() {
 			return false
 		},
 	}
-	handler.SetRoutes(
+	err := handler.SetRoutes(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 		&rest.Route{"GET", "/.status",
 			auth.MiddlewareFunc(
@@ -28,7 +29,10 @@ func main() {
 			),
 		},
 	)
-	http.ListenAndServe(":8080", &handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatal(http.ListenAndServe(":8080", &handler))
 }
 
 type Country struct {

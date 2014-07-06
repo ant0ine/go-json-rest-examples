@@ -18,14 +18,17 @@ func main() {
 	handler := rest.ResourceHandler{
 		EnableRelaxedContentType: true,
 	}
-	handler.SetRoutes(
+	err := handler.SetRoutes(
 		rest.RouteObjectMethod("GET", "/reminders", &api, "GetAllReminders"),
 		rest.RouteObjectMethod("POST", "/reminders", &api, "PostReminder"),
 		rest.RouteObjectMethod("GET", "/reminders/:id", &api, "GetReminder"),
 		rest.RouteObjectMethod("PUT", "/reminders/:id", &api, "PutReminder"),
 		rest.RouteObjectMethod("DELETE", "/reminders/:id", &api, "DeleteReminder"),
 	)
-	http.ListenAndServe(":8080", &handler)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatal(http.ListenAndServe(":8080", &handler))
 }
 
 type Reminder struct {
