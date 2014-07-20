@@ -88,6 +88,7 @@ func (u *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	u.Lock()
 	if u.Store[id] == nil {
 		rest.NotFound(w, r)
+		u.Unlock()
 		return
 	}
 	user := User{}
