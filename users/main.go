@@ -95,6 +95,7 @@ func (u *Users) PutUser(w rest.ResponseWriter, r *rest.Request) {
 	err := r.DecodeJsonPayload(&user)
 	if err != nil {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		u.Unlock()
 		return
 	}
 	user.Id = id
