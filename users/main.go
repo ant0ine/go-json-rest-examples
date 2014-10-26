@@ -18,11 +18,11 @@ func main() {
 		EnableRelaxedContentType: true,
 	}
 	err := handler.SetRoutes(
-		rest.RouteObjectMethod("GET", "/users", &users, "GetAllUsers"),
-		rest.RouteObjectMethod("POST", "/users", &users, "PostUser"),
-		rest.RouteObjectMethod("GET", "/users/:id", &users, "GetUser"),
-		rest.RouteObjectMethod("PUT", "/users/:id", &users, "PutUser"),
-		rest.RouteObjectMethod("DELETE", "/users/:id", &users, "DeleteUser"),
+		&rest.Route{"GET", "/users", users.GetAllUsers},
+		&rest.Route{"POST", "/users", users.PostUser},
+		&rest.Route{"GET", "/users/:id", users.GetUser},
+		&rest.Route{"PUT", "/users/:id", users.PutUser},
+		&rest.Route{"DELETE", "/users/:id", users.DeleteUser},
 	)
 	if err != nil {
 		log.Fatal(err)

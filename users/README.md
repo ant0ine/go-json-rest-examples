@@ -1,8 +1,12 @@
 # Users
 
-Demonstrate how to use `rest.RouteObjectMethod`
+Demonstrate how to use Method Values.
 
-`rest.RouteObjectMethod` helps create a Route that points to an object method instead of just a function.
+Method Values have been [introduced in Go 1.1](https://golang.org/doc/go1.1#method_values).
+
+Until then `rest.RouteObjectMethod` was provided, this method is now deprecated.
+
+This shows how to map a Route to a method of an instantiated object (eg: receiver of the method)
 
 The curl demo:
 ```

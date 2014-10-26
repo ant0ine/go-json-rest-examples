@@ -19,11 +19,11 @@ func main() {
 		EnableRelaxedContentType: true,
 	}
 	err := handler.SetRoutes(
-		rest.RouteObjectMethod("GET", "/reminders", &api, "GetAllReminders"),
-		rest.RouteObjectMethod("POST", "/reminders", &api, "PostReminder"),
-		rest.RouteObjectMethod("GET", "/reminders/:id", &api, "GetReminder"),
-		rest.RouteObjectMethod("PUT", "/reminders/:id", &api, "PutReminder"),
-		rest.RouteObjectMethod("DELETE", "/reminders/:id", &api, "DeleteReminder"),
+		&rest.Route{"GET", "/reminders", api.GetAllReminders},
+		&rest.Route{"POST", "/reminders", api.PostReminder},
+		&rest.Route{"GET", "/reminders/:id", api.GetReminder},
+		&rest.Route{"PUT", "/reminders/:id", api.PutReminder},
+		&rest.Route{"DELETE", "/reminders/:id", api.DeleteReminder},
 	)
 	if err != nil {
 		log.Fatal(err)
