@@ -6,17 +6,11 @@ import (
 	"net/http"
 )
 
-type Message struct {
-	Body string
-}
-
 func main() {
 	handler := rest.ResourceHandler{}
 	err := handler.SetRoutes(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
-			w.WriteJson(&Message{
-				Body: "Hello World!",
-			})
+			w.WriteJson(map[string]string{"Body": "Hello World!"})
 		}},
 	)
 	if err != nil {

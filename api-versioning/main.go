@@ -47,10 +47,6 @@ func (mw *SemVerMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.Handle
 	}
 }
 
-type Message struct {
-	Body string
-}
-
 func main() {
 	handler := rest.ResourceHandler{}
 	svmw := SemVerMiddleware{
@@ -62,10 +58,10 @@ func main() {
 			func(w rest.ResponseWriter, req *rest.Request) {
 				version := req.Env["VERSION"].(*semver.Version)
 				if version.Major == 2 {
-                                        // http://en.wikipedia.org/wiki/Second-system_effect
-					w.WriteJson(&Message{"Hello broken World!"})
+					// http://en.wikipedia.org/wiki/Second-system_effect
+					w.WriteJson(map[string]string{"Body": "Hello broken World!"})
 				} else {
-					w.WriteJson(&Message{"Hello World!"})
+					w.WriteJson(map[string]string{"Body": "Hello World!"})
 				}
 			},
 		)},

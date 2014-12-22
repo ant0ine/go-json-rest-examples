@@ -39,10 +39,6 @@ func (mw *StatsdMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.Handle
 	}
 }
 
-type Message struct {
-	Body string
-}
-
 func main() {
 	handler := rest.ResourceHandler{
 		OuterMiddlewares: []rest.Middleware{
@@ -57,9 +53,7 @@ func main() {
 			// take more than 1ms so statsd can report it
 			time.Sleep(100 * time.Millisecond)
 
-			w.WriteJson(&Message{
-				Body: "Hello World!",
-			})
+			w.WriteJson(map[string]string{"Body": "Hello World!"})
 		}},
 	)
 	if err != nil {
