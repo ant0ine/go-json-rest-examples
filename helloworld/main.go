@@ -11,7 +11,8 @@ type Message struct {
 }
 
 func main() {
-	router, err := rest.MakeRouter(
+	handler := rest.ResourceHandler{}
+	err := handler.SetRoutes(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
 			w.WriteJson(&Message{
 				Body: "Hello World!",
@@ -21,8 +22,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(rest.DefaultDevStack...)
-	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
+	log.Fatal(http.ListenAndServe(":8080", &handler))
 }
