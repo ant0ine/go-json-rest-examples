@@ -11,16 +11,16 @@ import (
 
 func main() {
 
-	handler := rest.ResourceHandler{}
-
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
 			for cpt := 1; cpt <= 10; cpt++ {
 
 				// wait 1 second
 				time.Sleep(time.Duration(1) * time.Second)
 
-				w.WriteJson(map[string]string{"Message": fmt.Sprintf("%d seconds", cpt)})
+				w.WriteJson(map[string]string{
+					"Message": fmt.Sprintf("%d seconds", cpt),
+				})
 				w.(http.ResponseWriter).Write([]byte("\n"))
 
 				// Flush the buffer to client
@@ -32,11 +32,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+
 	server := &graceful.Server{
 		Timeout: 10 * time.Second,
 		Server: &http.Server{
 			Addr:    ":8080",
-			Handler: &handler,
+			Handler: api.MakeHandler(),
 		},
 	}
 
