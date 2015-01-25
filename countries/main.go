@@ -9,10 +9,7 @@ import (
 
 func main() {
 
-	handler := rest.ResourceHandler{
-		EnableRelaxedContentType: true,
-	}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 		&rest.Route{"POST", "/countries", PostCountry},
 		&rest.Route{"GET", "/countries/:code", GetCountry},
@@ -21,7 +18,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
 type Country struct {

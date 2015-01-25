@@ -12,8 +12,7 @@ type Message struct {
 }
 
 func main() {
-	handler := rest.ResourceHandler{}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/lookup/#host", func(w rest.ResponseWriter, req *rest.Request) {
 			ip, err := net.LookupIP(req.PathParam("host"))
 			if err != nil {
@@ -26,5 +25,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
