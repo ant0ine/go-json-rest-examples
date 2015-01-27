@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/stream", StreamThings},
 	)
@@ -19,10 +18,7 @@ func main() {
 
 	api := rest.NewApi(router)
 	api.Use(&rest.AccessLogApacheMiddleware{})
-	api.Use(&rest.TimerMiddleware{})
-	api.Use(&rest.RecorderMiddleware{})
-	api.Use(&rest.RecoverMiddleware{})
-
+	api.Use(rest.DefaultCommonStack...)
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
