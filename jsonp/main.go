@@ -7,16 +7,9 @@ import (
 )
 
 func main() {
-	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
-			w.WriteJson(map[string]string{"Body": "Hello World!"})
-		}},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	api := rest.NewApi(router)
+	api := rest.NewApi(rest.AppSimple(func(w rest.ResponseWriter, r *rest.Request) {
+		w.WriteJson(map[string]string{"Body": "Hello World!"})
+	}))
 	api.Use(rest.DefaultDevStack...)
 	api.Use(&rest.JsonpMiddleware{
 		CallbackNameKey: "cb",

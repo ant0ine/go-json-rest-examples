@@ -7,14 +7,9 @@ import (
 )
 
 func main() {
-	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/countries", GetAllCountries},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	api := rest.NewApi(router)
+	api := rest.NewApi(rest.AppSimple(func(w rest.ResponseWriter, r *rest.Request) {
+		w.WriteJson(map[string]string{"Body": "Hello World!"})
+	}))
 	api.Use(rest.DefaultDevStack...)
 	api.Use(&rest.AuthBasicMiddleware{
 		Realm: "test zone",
@@ -26,24 +21,4 @@ func main() {
 		},
 	})
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
-}
-
-type Country struct {
-	Code string
-	Name string
-}
-
-func GetAllCountries(w rest.ResponseWriter, r *rest.Request) {
-	w.WriteJson(
-		[]Country{
-			Country{
-				Code: "FR",
-				Name: "France",
-			},
-			Country{
-				Code: "US",
-				Name: "United States",
-			},
-		},
-	)
 }
