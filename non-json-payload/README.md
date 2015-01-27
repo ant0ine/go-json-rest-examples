@@ -7,7 +7,7 @@ to build JSON responses. In order to serve different kind of content,
 it is recommended to either:
 a) use another server and configure CORS
    (see the cors/ example)
-b) combine the rest.ResourceHandler with another http.Handler
+b) combine the api.MakeHandler() with another http.Handler
    (see api-and-static/ example)
 
 That been said, exceptionally, it can be convenient to return a
