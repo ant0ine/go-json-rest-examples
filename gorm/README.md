@@ -7,9 +7,11 @@ In this example the same struct is used both as the GORM model and as the JSON m
 
 The curl demo:
 ```
-curl -i -H 'Content-Type: application/json' -d '{"Message":"this is a test"}' http://127.0.0.1:8080/reminders
+curl -i -H 'Content-Type: application/json' \
+    -d '{"Message":"this is a test"}' http://127.0.0.1:8080/reminders
 curl -i http://127.0.0.1:8080/reminders/1
 curl -i http://127.0.0.1:8080/reminders
-curl -i -X PUT -H 'Content-Type: application/json' -d '{"Message":"is updated"}' http://127.0.0.1:8080/reminders/1
+curl -i -X PUT -H 'Content-Type: application/json' \
+    -d '{"Message":"is updated"}' http://127.0.0.1:8080/reminders/1
 curl -i -X DELETE http://127.0.0.1:8080/reminders/1
 ```
