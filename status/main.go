@@ -7,18 +7,20 @@ import (
 )
 
 func main() {
-	handler := rest.ResourceHandler{
-		EnableStatusService: true,
-	}
-	err := handler.SetRoutes(
+	statusMw := &rest.StatusMiddleware{}
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/.status",
 			func(w rest.ResponseWriter, r *rest.Request) {
-				w.WriteJson(handler.GetStatus())
+				w.WriteJson(statusMw.GetStatus())
 			},
 		},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(statusMw)
+	api.Use(rest.DefaultDevStack...)
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }

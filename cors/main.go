@@ -7,29 +7,27 @@ import (
 )
 
 func main() {
-
-	handler := rest.ResourceHandler{
-		PreRoutingMiddlewares: []rest.Middleware{
-			&rest.CorsMiddleware{
-				RejectNonCorsRequests: false,
-				OriginValidator: func(origin string, request *rest.Request) bool {
-					return origin == "http://my.other.host"
-				},
-				AllowedMethods: []string{"GET", "POST", "PUT"},
-				AllowedHeaders: []string{
-					"Accept", "Content-Type", "X-Custom-Header", "Origin"},
-				AccessControlAllowCredentials: true,
-				AccessControlMaxAge:           3600,
-			},
-		},
-	}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	api.Use(&rest.CorsMiddleware{
+		RejectNonCorsRequests: false,
+		OriginValidator: func(origin string, request *rest.Request) bool {
+			return origin == "http://my.other.host"
+		},
+		AllowedMethods: []string{"GET", "POST", "PUT"},
+		AllowedHeaders: []string{
+			"Accept", "Content-Type", "X-Custom-Header", "Origin"},
+		AccessControlAllowCredentials: true,
+		AccessControlMaxAge:           3600,
+	})
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
 type Country struct {

@@ -20,12 +20,14 @@ func GetUser(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func main() {
-	handler := rest.ResourceHandler{}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/users/:id", GetUser},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(spdy.ListenAndServeTCP(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	log.Fatal(spdy.ListenAndServeTCP(":8080", api.MakeHandler()))
 }

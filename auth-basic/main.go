@@ -7,27 +7,25 @@ import (
 )
 
 func main() {
-
-	handler := rest.ResourceHandler{
-		PreRoutingMiddlewares: []rest.Middleware{
-			&rest.AuthBasicMiddleware{
-				Realm: "test zone",
-				Authenticator: func(userId string, password string) bool {
-					if userId == "admin" && password == "admin" {
-						return true
-					}
-					return false
-				},
-			},
-		},
-	}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	api.Use(&rest.AuthBasicMiddleware{
+		Realm: "test zone",
+		Authenticator: func(userId string, password string) bool {
+			if userId == "admin" && password == "admin" {
+				return true
+			}
+			return false
+		},
+	})
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
 type Country struct {

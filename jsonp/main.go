@@ -7,14 +7,7 @@ import (
 )
 
 func main() {
-	handler := rest.ResourceHandler{
-		PreRoutingMiddlewares: []rest.Middleware{
-			&rest.JsonpMiddleware{
-				CallbackNameKey: "cb",
-			},
-		},
-	}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
 			w.WriteJson(map[string]string{"Body": "Hello World!"})
 		}},
@@ -22,5 +15,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(rest.DefaultDevStack...)
+	api.Use(&rest.JsonpMiddleware{
+		CallbackNameKey: "cb",
+	})
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }

@@ -7,9 +7,6 @@ import (
 )
 
 func main() {
-	handler := rest.ResourceHandler{
-		EnableStatusService: true,
-	}
 	auth := &rest.AuthBasicMiddleware{
 		Realm: "test zone",
 		Authenticator: func(userId string, password string) bool {
@@ -19,7 +16,7 @@ func main() {
 			return false
 		},
 	}
-	err := handler.SetRoutes(
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 		&rest.Route{"GET", "/.status",
 			auth.MiddlewareFunc(
@@ -32,7 +29,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+
+	api := rest.NewApi(router)
+	api.Use(statusMw)
+	api.Use(rest.DefaultDevStack...)
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
 type Country struct {
