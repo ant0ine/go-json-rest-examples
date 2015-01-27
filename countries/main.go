@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/countries", GetAllCountries},
 		&rest.Route{"POST", "/countries", PostCountry},
