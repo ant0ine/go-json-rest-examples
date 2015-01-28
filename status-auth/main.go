@@ -7,6 +7,10 @@ import (
 )
 
 func main() {
+	api := rest.NewApi()
+	statusMw := &rest.StatusMiddleware{}
+	api.Use(statusMw)
+	api.Use(rest.DefaultDevStack...)
 	auth := &rest.AuthBasicMiddleware{
 		Realm: "test zone",
 		Authenticator: func(userId string, password string) bool {
@@ -21,7 +25,7 @@ func main() {
 		&rest.Route{"GET", "/.status",
 			auth.MiddlewareFunc(
 				func(w rest.ResponseWriter, r *rest.Request) {
-					w.WriteJson(handler.GetStatus())
+					w.WriteJson(statusMw.GetStatus())
 				},
 			),
 		},
@@ -29,10 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(statusMw)
-	api.Use(rest.DefaultDevStack...)
+	api.SetApp(router)
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 

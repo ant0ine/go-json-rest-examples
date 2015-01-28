@@ -60,6 +60,12 @@ func (mw *SemVerMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.Handle
 }
 
 func main() {
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+	api.Use(SemVerMiddleware{
+		MinVersion: "1.0.0",
+		MaxVersion: "3.0.0",
+	})
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/#version/message", svmw.MiddlewareFunc(
 			func(w rest.ResponseWriter, req *rest.Request) {
@@ -80,13 +86,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(rest.DefaultDevStack...)
-	api.Use(SemVerMiddleware{
-		MinVersion: "1.0.0",
-		MaxVersion: "3.0.0",
-	})
+	api.SetApp(router)
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

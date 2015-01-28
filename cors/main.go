@@ -7,14 +7,7 @@ import (
 )
 
 func main() {
-	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/countries", GetAllCountries},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	api := rest.NewApi(router)
+	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	api.Use(&rest.CorsMiddleware{
 		RejectNonCorsRequests: false,
@@ -27,6 +20,13 @@ func main() {
 		AccessControlAllowCredentials: true,
 		AccessControlMaxAge:           3600,
 	})
+	router, err := rest.MakeRouter(
+		&rest.Route{"GET", "/countries", GetAllCountries},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	api.SetApp(router)
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 

@@ -14,6 +14,8 @@ func main() {
 		Store: map[string]*User{},
 	}
 
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/users", users.GetAllUsers},
 		&rest.Route{"POST", "/users", users.PostUser},
@@ -24,9 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(rest.DefaultDevStack...)
+	api.SetApp(router)
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 

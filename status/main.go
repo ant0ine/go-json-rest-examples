@@ -7,7 +7,10 @@ import (
 )
 
 func main() {
+	api := rest.NewApi()
 	statusMw := &rest.StatusMiddleware{}
+	api.Use(statusMw)
+	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/.status",
 			func(w rest.ResponseWriter, r *rest.Request) {
@@ -18,9 +21,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(statusMw)
-	api.Use(rest.DefaultDevStack...)
+	api.SetApp(router)
 	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }

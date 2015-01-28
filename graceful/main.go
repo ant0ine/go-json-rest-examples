@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
 			for cpt := 1; cpt <= 10; cpt++ {
@@ -31,9 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	api := rest.NewApi(router)
-	api.Use(rest.DefaultDevStack...)
+	api.SetApp(router)
 
 	server := &graceful.Server{
 		Timeout: 10 * time.Second,
