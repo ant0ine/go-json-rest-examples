@@ -15,7 +15,7 @@ different content type on a JSON endpoint. In this case, setting the
 Content-Type and using the type assertion to access the Write method
 is enough. As shown in this example.
 
-The curl demo:
+curl demo:
 ```
 curl -i http://127.0.0.1:8080/message.txt
 ```

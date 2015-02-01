@@ -5,8 +5,7 @@ Demonstrate how to setup a `/.status` endpoint
 Inspired by memcached "stats", this optional feature can be enabled to help monitoring the service.
 This example shows how to enable the stats, and how to setup the `/.status` route.
 
-
-The curl demo:
+curl demo:
 ```
 curl -i http://127.0.0.1:8080/.status
 curl -i http://127.0.0.1:8080/.status

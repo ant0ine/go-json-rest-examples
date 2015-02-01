@@ -16,7 +16,7 @@ Setup:
  * rm -rf github.com/ant0ine/go-json-rest/examples/
  * path/to/google_appengine/dev_appserver.py .
 
-The curl demo:
+curl demo:
 ```
 curl -i http://127.0.0.1:8080/message
 ```

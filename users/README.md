@@ -8,7 +8,7 @@ Until then `rest.RouteObjectMethod` was provided, this method is now deprecated.
 
 This shows how to map a Route to a method of an instantiated object (eg: receiver of the method)
 
-The curl demo:
+curl demo:
 ```
 curl -i -H 'Content-Type: application/json' \
     -d '{"Name":"Antoine"}' http://127.0.0.1:8080/users
