@@ -37,22 +37,15 @@ func (mw *NewRelicMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.Hand
 }
 
 func main() {
-	handler := rest.ResourceHandler{
-		OuterMiddlewares: []rest.Middleware{
-			&NewRelicMiddleware{
-				License: "<REPLACE WITH THE LICENSE KEY>",
-				Name:    "<REPLACE WITH THE APP NAME>",
-				Verbose: true,
-			},
-		},
-	}
-	err := handler.SetRoutes(
-		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
-			w.WriteJson(map[string]string{"Body": "Hello World!"})
-		}},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+	api.Use(&NewRelicMiddleware{
+		License: "<REPLACE WITH THE LICENSE KEY>",
+		Name:    "<REPLACE WITH THE APP NAME>",
+		Verbose: true,
+	})
+	api.SetApp(rest.AppSimple(func(w rest.ResponseWriter, r *rest.Request) {
+		w.WriteJson(map[string]string{"Body": "Hello World!"})
+	}))
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }

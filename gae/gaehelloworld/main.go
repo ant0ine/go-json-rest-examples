@@ -7,8 +7,9 @@ import (
 )
 
 func init() {
-	handler := rest.ResourceHandler{}
-	err := handler.SetRoutes(
+	api := rest.NewApi()
+	api.Use(rest.DefaultDevStack...)
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
 			w.WriteJson(map[string]string{"Body": "Hello World!"})
 		}},
@@ -16,5 +17,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/", &handler)
+	api.SetApp(router)
+	http.Handle("/", api.MakeHandler())
 }

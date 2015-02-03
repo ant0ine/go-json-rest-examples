@@ -4,7 +4,7 @@ Demonstrate a streaming REST API, where the data is "flushed" to the client ASAP
 
 The stream format is a Line Delimited JSON.
 
-The curl demo:
+curl demo:
 ```
 curl -i http://127.0.0.1:8080/stream
 ```

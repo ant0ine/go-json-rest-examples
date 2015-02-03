@@ -4,7 +4,7 @@ Demonstrate how to use OuterMiddlewares to do additional logging and reporting.
 
 Here `request.Env["STATUS_CODE"]` and `request.Env["ELAPSED_TIME"]` that are available to outer middlewares are used with the [g2s](https://github.com/peterbourgon/g2s) statsd client to send these metrics to statsd.
 
-The curl demo:
+curl demo:
 ``` sh
 # start statsd server
 # monitor network

@@ -40,24 +40,17 @@ func (mw *StatsdMiddleware) MiddlewareFunc(handler rest.HandlerFunc) rest.Handle
 }
 
 func main() {
-	handler := rest.ResourceHandler{
-		OuterMiddlewares: []rest.Middleware{
-			&StatsdMiddleware{
-				IpPort: "localhost:8125",
-			},
-		},
-	}
-	err := handler.SetRoutes(
-		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
+	api := rest.NewApi()
+	api.Use(&StatsdMiddleware{
+		IpPort: "localhost:8125",
+	})
+	api.Use(rest.DefaultDevStack...)
+	api.SetApp(AppSimple(func(w rest.ResponseWriter, req *rest.Request) {
 
-			// take more than 1ms so statsd can report it
-			time.Sleep(100 * time.Millisecond)
+		// take more than 1ms so statsd can report it
+		time.Sleep(100 * time.Millisecond)
 
-			w.WriteJson(map[string]string{"Body": "Hello World!"})
-		}},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+		w.WriteJson(map[string]string{"Body": "Hello World!"})
+	}))
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }

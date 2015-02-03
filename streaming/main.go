@@ -9,18 +9,17 @@ import (
 )
 
 func main() {
-
-	handler := rest.ResourceHandler{
-		EnableRelaxedContentType: true,
-		DisableJsonIndent:        true,
-	}
-	err := handler.SetRoutes(
+	api := rest.NewApi()
+	api.Use(&rest.AccessLogApacheMiddleware{})
+	api.Use(rest.DefaultCommonStack...)
+	router, err := rest.MakeRouter(
 		&rest.Route{"GET", "/stream", StreamThings},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Fatal(http.ListenAndServe(":8080", &handler))
+	api.SetApp(router)
+	log.Fatal(http.ListenAndServe(":8080", api.MakeHandler()))
 }
 
 type Thing struct {
