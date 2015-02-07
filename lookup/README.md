@@ -1,6 +1,6 @@
 # Lookup
 
-Demonstrate how to use the relaxed placeholder (notation #paramName).
+Demonstrate how to use the relaxed placeholder (notation `#paramName`).
 This placeholder matches everything until the first `/`, including `.`
 
 curl demo:
