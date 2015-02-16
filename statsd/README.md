@@ -1,8 +1,7 @@
 # Statsd
 
-Demonstrate how to use OuterMiddlewares to do additional logging and reporting.
-
-Here `request.Env["STATUS_CODE"]` and `request.Env["ELAPSED_TIME"]` that are available to outer middlewares are used with the [g2s](https://github.com/peterbourgon/g2s) statsd client to send these metrics to statsd.
+Demonstrate how to use the [Statsd Middleware](https://github.com/ant0ine/go-json-rest-middleware-statsd) to collect statistics about the requests/reponses.
+This middleware is based on the [g2s](https://github.com/peterbourgon/g2s) statsd client.
 
 curl demo:
 ``` sh
