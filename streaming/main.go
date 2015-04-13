@@ -13,7 +13,7 @@ func main() {
 	api.Use(&rest.AccessLogApacheMiddleware{})
 	api.Use(rest.DefaultCommonStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/stream", StreamThings},
+		rest.Get("/stream", StreamThings),
 	)
 	if err != nil {
 		log.Fatal(err)

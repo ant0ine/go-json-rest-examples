@@ -67,7 +67,7 @@ func main() {
 		MaxVersion: "3.0.0",
 	})
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/#version/message", svmw.MiddlewareFunc(
+		rest.Get("/#version/message", svmw.MiddlewareFunc(
 			func(w rest.ResponseWriter, req *rest.Request) {
 				version := req.Env["VERSION"].(*semver.Version)
 				if version.Major == 2 {
@@ -81,7 +81,7 @@ func main() {
 					})
 				}
 			},
-		)},
+		)),
 	)
 	if err != nil {
 		log.Fatal(err)

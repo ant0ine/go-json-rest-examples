@@ -21,7 +21,7 @@ func main() {
 		AccessControlMaxAge:           3600,
 	})
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/countries", GetAllCountries},
+		rest.Get("/countries", GetAllCountries),
 	)
 	if err != nil {
 		log.Fatal(err)

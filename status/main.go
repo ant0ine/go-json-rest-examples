@@ -12,11 +12,9 @@ func main() {
 	api.Use(statusMw)
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/.status",
-			func(w rest.ResponseWriter, r *rest.Request) {
-				w.WriteJson(statusMw.GetStatus())
-			},
-		},
+		rest.Get("/.status", func(w rest.ResponseWriter, r *rest.Request) {
+			w.WriteJson(statusMw.GetStatus())
+		}),
 	)
 	if err != nil {
 		log.Fatal(err)

@@ -23,7 +23,7 @@ func main() {
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/users/:id", GetUser},
+		rest.Get("/users/:id", GetUser),
 	)
 	if err != nil {
 		log.Fatal(err)
