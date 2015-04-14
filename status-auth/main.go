@@ -21,14 +21,12 @@ func main() {
 		},
 	}
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/countries", GetAllCountries},
-		&rest.Route{"GET", "/.status",
-			auth.MiddlewareFunc(
-				func(w rest.ResponseWriter, r *rest.Request) {
-					w.WriteJson(statusMw.GetStatus())
-				},
-			),
-		},
+		rest.Get("/countries", GetAllCountries),
+		rest.Get("/.status", auth.MiddlewareFunc(
+			func(w rest.ResponseWriter, r *rest.Request) {
+				w.WriteJson(statusMw.GetStatus())
+			},
+		)),
 	)
 	if err != nil {
 		log.Fatal(err)

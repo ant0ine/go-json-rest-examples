@@ -13,7 +13,7 @@ func main() {
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
+		rest.Get("/message", func(w rest.ResponseWriter, req *rest.Request) {
 			for cpt := 1; cpt <= 10; cpt++ {
 
 				// wait 1 second
@@ -27,7 +27,7 @@ func main() {
 				// Flush the buffer to client
 				w.(http.Flusher).Flush()
 			}
-		}},
+		}),
 	)
 	if err != nil {
 		log.Fatal(err)

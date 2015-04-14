@@ -33,9 +33,10 @@ func main() {
 		IfTrue: jwt_middleware,
 	})
 	api_router, _ := rest.MakeRouter(
-		&rest.Route{"POST", "/login", jwt_middleware.LoginHandler},
-		&rest.Route{"GET", "/auth_test", handle_auth},
-		&rest.Route{"GET", "/refresh_token", jwt_middleware.RefreshHandler})
+		rest.Post("/login", jwt_middleware.LoginHandler),
+		rest.Get("/auth_test", handle_auth),
+		rest.Get("/refresh_token", jwt_middleware.RefreshHandler),
+	)
 	api.SetApp(api_router)
 
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))

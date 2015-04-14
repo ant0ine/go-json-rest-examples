@@ -11,9 +11,9 @@ func main() {
 	api.Use(rest.DefaultDevStack...)
 
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/message", func(w rest.ResponseWriter, req *rest.Request) {
+		rest.Get("/message", func(w rest.ResponseWriter, req *rest.Request) {
 			w.WriteJson(map[string]string{"Body": "Hello World!"})
-		}},
+		}),
 	)
 	if err != nil {
 		log.Fatal(err)

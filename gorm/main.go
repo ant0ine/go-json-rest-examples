@@ -18,11 +18,11 @@ func main() {
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	router, err := rest.MakeRouter(
-		&rest.Route{"GET", "/reminders", i.GetAllReminders},
-		&rest.Route{"POST", "/reminders", i.PostReminder},
-		&rest.Route{"GET", "/reminders/:id", i.GetReminder},
-		&rest.Route{"PUT", "/reminders/:id", i.PutReminder},
-		&rest.Route{"DELETE", "/reminders/:id", i.DeleteReminder},
+		rest.Get("/reminders", i.GetAllReminders),
+		rest.Post("/reminders", i.PostReminder),
+		rest.Get("/reminders/:id", i.GetReminder),
+		rest.Put("/reminders/:id", i.PutReminder),
+		rest.Delete("/reminders/:id", i.DeleteReminder),
 	)
 	if err != nil {
 		log.Fatal(err)
