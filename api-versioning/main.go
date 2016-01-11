@@ -72,7 +72,7 @@ func main() {
 			func(w rest.ResponseWriter, req *rest.Request) {
 				version := req.Env["VERSION"].(*semver.Version)
 				if version.Major == 2 {
-					// http://en.wikipedia.org/wiki/Second-system_effect
+					// https://en.wikipedia.org/wiki/Second-system_effect
 					w.WriteJson(map[string]string{
 						"Body": "Hello broken World!",
 					})
