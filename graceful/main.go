@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ant0ine/go-json-rest/rest"
-	"github.com/stretchr/graceful"
+        "gopkg.in/tylerb/graceful.v1"
 	"log"
 	"net/http"
 	"time"
